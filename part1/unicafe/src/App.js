@@ -1,53 +1,84 @@
 import { useState } from 'react'
 
-const Display = (props) => <div>{props.text}, {props.value}</div>
+const Header = props => <h1>{props.name}</h1>
 
-const Button = (props) => (
-  <button onClick={props.handleClick}>
-    {props.text}
-  </button>
+const StatisticLine = ({text, value}) => {
+  // once i had everything else done i googled the solution to figure out how to add the % after the value lol
+	if (text === "positive") {
+    return (
+    	<tr><td>{text} {value} %</td></tr>
+		)
+	}
+
+	return (
+		<tr><td>{text} {value}</td></tr>
+	)
+}
+
+const Statistics = ({clicks}) => {
+	const total = (clicks.good + clicks.neutral + clicks.bad)
+	const average = (clicks.good * 1 + clicks.bad * -1) / total
+	const positive = clicks.good * (100 / total)
+
+	if (total === 0) { return(<div>no feedback</div>) }
+
+	return (
+		<div>
+			<table>
+				<tbody>
+					<StatisticLine text="good" value={clicks.good} />
+					<StatisticLine text="neutral" value={clicks.neutral} />
+					<StatisticLine text="bad" value={clicks.bad} />
+					<StatisticLine text="total" value={total} />
+					<StatisticLine text="average" value={average} />
+					<StatisticLine text="positive" value={positive} />
+				</tbody>
+			</table>
+		</div>
+	)
+}
+
+
+const Button = ({ onClick, text }) => (
+	<button onClick={onClick}>
+		{text}
+	</button>
 )
 
 const App = () => {
-  // save clicks of each button to its own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-  const [counter, setCounter] = useState(0)
-  const [average, setAverage] = useState(0)
-  const [positive, setPositive] = useState(0)
+	// save clicks of each button to own state
+	const [clicks, setClicks] = useState({
+		good: 0, neutral: 0, bad: 0
+	})
 
-  const goodToValue = () => {
-    setGood(prev => prev + 1);
-    setCounter(prev => prev + 1);
-    setAverage(prev => prev + 1);
-  }
+	const goodToValue = () => {
+		setClicks({
+			...clicks, 
+			good: clicks.good + 1})
+	}
 
-  const neutralToValue = () => {
-    setNeutral(prev => prev + 1);
-    setCounter(prev => prev + 1);
-  }
+	const neutralToValue = () =>
+		setClicks({
+			...clicks, 
+			neutral: clicks.neutral + 1
+		})
 
-  const badToValue = () => {
-    setBad(prev => prev + 1);
-    setCounter(prev => prev + 1);
-    setAverage(prev => prev - 1);
-  }
+	const badToValue = () =>
+		setClicks({
+			...clicks, 
+			bad: clicks.bad + 1
+		})
 
-  return (
-    <div>
-      <h1>hullo; welcyum to mine good coffe haus</h1>
-      <Button handleClick={() => goodToValue()} text="good" />
-      <Button handleClick={() => neutralToValue()} text="neutral" />
-      <Button handleClick={() => badToValue()} text="bad" />
-      <Display text="good" value={good} />
-      <Display text="neutral" value={neutral} />
-      <Display text="bad" value={bad} />
-      <Display text="reviews" value={counter} />
-      <Display text="average" value={(average / counter)} />
-      <Display text="positive" value={((good / counter) * 100)} />
-    </div>
-  )
+	return (
+		<div>
+			<Header name="welgum to mein cofe haus :)" />
+			<Button onClick={goodToValue} text='good' />
+			<Button onClick={neutralToValue} text='neutral' />
+			<Button onClick={badToValue} text='bad' />
+			<Header name="Statistics" />
+			<Statistics clicks={clicks} />
+		</div>
+	)
 }
 
 export default App
