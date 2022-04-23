@@ -11,6 +11,26 @@ const Display = (props) => {
   return (<h1>{text}</h1>)
 }
 
+const Best = ({anecdotes, votes}) => {
+  const bestVote = Math.max(...votes)
+  const bestIndex = votes.indexOf(bestVote)
+  const best = anecdotes[bestIndex]
+
+  if (bestVote === 0) {
+    return (
+      <p>none</p>
+    )
+  }
+
+    return (
+      <div>
+        <p>{best}</p>
+        <p>has {bestVote} votes</p>
+      </div>
+    )
+}
+
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -23,18 +43,27 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  const [best, setBest] = useState(0)
+
+  const getVotes = () => {
+    const votesCopy = [...votes]
+    votesCopy[selected] += 1
+    setVotes(votesCopy)
+  }
 
   const getSelected = () => {
     setSelected(Math.floor(Math.random() * (anecdotes.length)))
   }
 
-  console.log(selected)
-  console.log([anecdotes[selected]])
-
   return (
     <div>
       <Display text={anecdotes[selected]} />
+      <Display text={votes[selected]} />
+      <Button onClick={getVotes} text="vote" />
       <Button onClick={getSelected} text="get quote" />
+      <Display text="Best Quote: " />
+      <Best anecdotes={anecdotes} votes={votes} />
     </div>
 
   )
