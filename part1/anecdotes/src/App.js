@@ -1,5 +1,10 @@
 import { useState } from 'react'
 
+const Header = (props) => {
+  const text = props.text
+  return (<h1>{text}</h1>)
+}
+
 const Button = ({ onClick, text }) => (
 	<button onClick={onClick}>
 		{text}
@@ -8,7 +13,7 @@ const Button = ({ onClick, text }) => (
 
 const Display = (props) => {
   const text = props.text
-  return (<h1>{text}</h1>)
+  return (<div>{text}</div>)
 }
 
 const Best = ({anecdotes, votes}) => {
@@ -58,11 +63,14 @@ const App = () => {
 
   return (
     <div>
+      <Header text="Quote of the Day!" />
       <Display text={anecdotes[selected]} />
+      <br></br>
+      <Display text="votes: " />
       <Display text={votes[selected]} />
       <Button onClick={getVotes} text="vote" />
       <Button onClick={getSelected} text="get quote" />
-      <Display text="Best Quote: " />
+      <Header text="Best Quote: " />
       <Best anecdotes={anecdotes} votes={votes} />
     </div>
 
