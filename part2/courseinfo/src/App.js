@@ -1,67 +1,51 @@
-const Header = (props) => {
-  //console.log("Header component " + props)
-  return (
-      <h1>
-        {props.course.name}
-      </h1>
-  )
+const Header = props => <h1>{props.name}</h1>
+
+const Content = ({part}) => {
+  const name = part.name
+  const exercises = part.exercises
+  const id = part.id
+
+  return <div>{name} {exercises}</div>
 }
 
-const Content = (props) => {
-  //console.log(props)
-  //console.log()
-  return (
-    <div>
-      <Part part={props.parts[0]} />
-      <Part part={props.parts[1]} />
-      <Part part={props.parts[2]} />
-    </div>
-  )
-}
-
-const Part = (props) => {
-  //console.log("Part component" + props)
-  //console.log(props.part.name)
-  return (
-      <p>{props.part.name} {props.part.exercises}</p>
-  )
-}
-
-
-const Total = (props) => {
-  //console.log("Total component has arrived " + props)
-  //console.log("Total component has arrived " + props.parts[0].exercises)
-  return (
-    <p>{props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
-  )
+const Course = ({course}) => {
+  const name = course.name
+  const parts = course.parts
+  console.log("course, ", course)
+  console.log("part, ", parts)
+  console.log("parts, ", course.parts)
+  return <div>
+    <Header name={name}/>
+    <Content part={parts[0]} />
+    <Content part={parts[1]} />
+    <Content part={parts[2]} />
+  </div>
 }
 
 const App = () => {
   const course = {
+    id: 1,
     name: 'Half Stack application development',
     parts: [
       {
         name: 'Fundamentals of React',
-        exercises: 10
+        exercises: 10,
+        id: 1
       },
       {
         name: 'Using props to pass data',
-        exercises: 7
+        exercises: 7,
+        id: 2
       },
       {
         name: 'State of a component',
-        exercises: 14
+        exercises: 14,
+        id: 3
       }
     ]
   }
 
-  return (
-    <div>
-      <Header course={course}/>
-      <Content parts={course.parts}/>
-      <Total parts={course.parts}/>
-    </div>
-  )
+  return <Course course={course} />
 }
 
 export default App
