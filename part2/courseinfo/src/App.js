@@ -11,14 +11,27 @@ const Content = ({part}) => {
 const Course = ({course}) => {
   const name = course.name
   const parts = course.parts
-  console.log("course, ", course)
-  console.log("part, ", parts)
-  console.log("parts, ", course.parts)
+  let sum = 0
+  let array1 = []
+  
+  // for (let i = 0; i < parts.length; i++) {
+  //   sum += parts[i].exercises
+  // } // works fine btw
+
+  for (let i = 0; i < parts.length; i++) {
+    array1.push(parts[i].exercises)
+  }
+
+  const sumWithInitial = array1.reduce(
+  (previousValue, currentValue) => previousValue + currentValue,
+  0);
+
   return <div>
     <Header name={name}/>
     <Content part={parts[0]} />
     <Content part={parts[1]} />
     <Content part={parts[2]} />
+    <div>sum of exercises: {sumWithInitial}</div>
   </div>
 }
 
